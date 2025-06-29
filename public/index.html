@@ -1,37 +1,6 @@
-// ===================================================
-// ファイル名: index.js
-// ✅ このファイルは既にOK！変更は不要です。
-// ===================================================
-const express = require('express');
-const path = require('path');
-const app = express();
-const port = process.env.PORT || 3000;
-
-// APIキーなどをフロントエンドに渡すためのAPIエンドポイント
-app.get('/api/config', (req, res) => {
-  res.json({
-    apiKey: process.env.GOOGLE_API_KEY,
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    folderId: process.env.GOOGLE_DRIVE_FOLDER_ID
-  });
-});
-
-// 静的ファイルの提供（index.htmlなどを表示するため）
-app.use(express.static(path.join(__dirname)));
-
-// メインページのルート
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// サーバー起動
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
-```html
 <!-- =================================================== -->
 <!-- ファイル名: index.html                              -->
-<!-- ✅ このコードをコピーして、GitHubのindex.htmlに貼り付けて！ -->
+<!-- この内容で、あなたのindex.htmlを丸ごと上書きしてください。 -->
 <!-- =================================================== -->
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,192 +8,33 @@ app.listen(port, () => {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>姫路の種＆ブドウちゃん 動画アップロード</title>
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap)" rel="stylesheet">
+    <!-- ここにCSSのスタイルを追加できます -->
     <style>
-        :root {
-            --primary-color: #6a1b9a; /* 紫色 */
-            --primary-light: #f3e5f5;
-            --secondary-color: #ffab00; /* 黄色 */
-            --text-color: #333;
-            --background-color: #f9f9f9;
-            --border-color: #ddd;
-            --success-color: #4caf50;
-            --error-color: #f44336;
-        }
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 1em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        .container {
-            background-color: white;
-            padding: 2em 2.5em;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            box-sizing: border-box;
-        }
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 1.5em;
-            font-weight: 700;
-        }
-        .form-group {
-            margin-bottom: 1.5em;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5em;
-            font-weight: 500;
-            color: #555;
-        }
-        label span {
-            background-color: var(--primary-color);
-            color: white;
-            font-size: 0.7em;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1em;
-            font-family: 'Noto Sans JP', sans-serif;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        input[type="text"]:focus, textarea:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px var(--primary-light);
-            outline: none;
-        }
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        #drop-zone {
-            border: 2px dashed var(--border-color);
-            border-radius: 8px;
-            padding: 30px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
-            background-color: #fafafa;
-        }
-        #drop-zone.dragover {
-            background-color: var(--primary-light);
-            border-color: var(--primary-color);
-        }
-        #drop-zone p {
-            margin: 0.5em 0;
-        }
-        #file-list {
-            margin-top: 1em;
-            padding-left: 0;
-            list-style-type: none;
-        }
-        #file-list li {
-            background-color: #f1f1f1;
-            padding: 8px 12px;
-            border-radius: 6px;
-            margin-bottom: 5px;
-            font-size: 0.9em;
-            word-break: break-all;
-        }
-        #upload-button {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--primary-color), #8e24aa);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            box-shadow: 0 4px 15px rgba(106, 27, 154, 0.2);
-        }
-        #upload-button:hover {
-            opacity: 0.9;
-        }
-        #upload-button:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 10px rgba(106, 27, 154, 0.2);
-        }
-        #upload-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-        #progress-container {
-            margin-top: 1.5em;
-        }
-        #progress-text {
-            text-align: center;
-            margin-bottom: 0.5em;
-        }
-        progress {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 10px;
-            border: none;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        progress::-webkit-progress-bar {
-            background-color: #eee;
-        }
-        progress::-webkit-progress-value {
-            background-color: var(--success-color);
-            transition: width 0.4s ease;
-        }
-        .info {
-            font-size: 0.8em;
-            color: #777;
-            margin-top: 10px;
-        }
+        body { font-family: sans-serif; padding: 2em; }
+        .container { max-width: 600px; margin: 0 auto; }
+        /* 他のスタイル */
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>ショート動画アップロード</h1>
+        <h1>ショート動画アップロードのお願い</h1>
+        <!-- フォームのHTML... -->
         <form id="upload-form">
-            <div class="form-group">
-                <label for="shop-name">お店の名前<span>必須</span></label>
-                <input type="text" id="shop-name" placeholder="例：姫路の種" required>
+            <div>
+                <label for="shop-name">お店の名前 *必須</label>
+                <input type="text" id="shop-name" required>
             </div>
-            <div class="form-group">
-                <label for="video-description">動画の説明<span>必須</span></label>
-                <textarea id="video-description" placeholder="例：今日のランチメニューの紹介です！" required></textarea>
+            <div>
+                <label for="video-description">動画の説明 *必須</label>
+                <textarea id="video-description" required></textarea>
             </div>
-            <div class="form-group">
-                <label>ショート動画素材<span>必須</span></label>
-                <div id="drop-zone">
-                    <p>ここに動画ファイルをドロップ</p>
-                    <p>またはクリックしてファイルを選択</p>
-                    <div class="info">■ 5〜10秒程度 ■ 対応形式: MP4, MOV</div>
-                </div>
-                <input type="file" id="file-input" multiple accept="video/mp4,video/quicktime,video/x-m4v" style="display: none;">
-                <ul id="file-list"></ul>
+            <div>
+                <label>ショート動画素材 *必須 (最大5動画まで)</label>
+                <div id="drop-zone">ここに動画ファイルをドロップまたはクリックしてファイルを選択</div>
+                <input type="file" id="file-input" multiple accept="video/mp4,video/quicktime" style="display: none;">
+                <div id="file-list"></div>
             </div>
-            <button type="submit" id="upload-button">アップロードする</button>
+            <button type="submit" id="upload-button">ショート動画をアップロードする</button>
         </form>
         <div id="progress-container" style="display: none;">
             <p id="progress-text"></p>
@@ -232,23 +42,34 @@ app.listen(port, () => {
         </div>
     </div>
 
-    <script src="[https://apis.google.com/js/api.js](https://apis.google.com/js/api.js)"></script>
+    <!-- Google APIs Client Library -->
+    <script src="https://apis.google.com/js/api.js"></script>
     <script>
+        // --- ここからが修正されたJavaScriptです ---
+
         let gapiInited = false;
         let gisInited = false;
         let tokenClient;
+        
+        // 設定情報を保持する変数
         let CONFIG = {};
 
+        // 1. まずサーバーから設定情報を取得する
         async function fetchConfig() {
             try {
                 const response = await fetch('/api/config');
-                if (!response.ok) throw new Error('設定ファイルの読み込みに失敗しました。');
+                if (!response.ok) {
+                    throw new Error('設定ファイルの読み込みに失敗しました。');
+                }
                 CONFIG = await response.json();
+                
+                // 2. 設定情報を取得できたら、Googleの初期化処理を開始
                 gapiLoad();
                 gisInit();
+
             } catch (error) {
                 console.error(error);
-                alert('エラー: アプリケーションの設定を読み込めませんでした。');
+                alert('エラー: 設定を読み込めませんでした。');
             }
         }
 
@@ -257,52 +78,46 @@ app.listen(port, () => {
         }
 
         async function initializeGapiClient() {
-            try {
-                await gapi.client.init({
-                    apiKey: CONFIG.apiKey,
-                    discoveryDocs: ['[https://www.googleapis.com/discovery/v1/apis/drive/v3/rest](https://www.googleapis.com/discovery/v1/apis/drive/v3/rest)'],
-                });
-                gapiInited = true;
-            } catch (error) {
-                 console.error("GAPI Client init error:", error);
-                 alert('GAPIクライアントの初期化に失敗しました。APIキーが正しいか確認してください。');
-            }
+            await gapi.client.init({
+                apiKey: CONFIG.apiKey,
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+            });
+            gapiInited = true;
         }
 
         function gisInit() {
-            try {
-                tokenClient = google.accounts.oauth2.initTokenClient({
-                    client_id: CONFIG.clientId,
-                    scope: '[https://www.googleapis.com/auth/drive.file](https://www.googleapis.com/auth/drive.file)',
-                    callback: '', 
-                });
-                gisInited = true;
-            } catch (error) {
-                 console.error("GIS init error:", error);
-                 alert('Google認証の初期化に失敗しました。クライアントIDが正しいか確認してください。');
-            }
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CONFIG.clientId,
+                scope: 'https://www.googleapis.com/auth/drive.file',
+                callback: '', // The callback is handled by the Promise in handleAuthClick
+            });
+            gisInited = true;
         }
         
+        // ページの読み込みが完了したら、まず設定情報を取得しにいく
         window.onload = fetchConfig;
 
+        // --- アップロード処理のロジック ---
         const uploadForm = document.getElementById('upload-form');
         const uploadButton = document.getElementById('upload-button');
 
-        uploadForm.addEventListener('submit', (e) => {
+        uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!gapiInited || !gisInited) {
                 alert('APIの準備ができていません。少し待ってからもう一度お試しください。');
                 return;
             }
+
+            // Google認証処理
             handleAuthClick();
         });
 
         function handleAuthClick() {
              tokenClient.callback = async (resp) => {
                 if (resp.error !== undefined) {
-                    alert('Google認証に失敗しました。ポップアップがブロックされていないか確認してください。');
                     throw (resp);
                 }
+                // 認証が成功したら、アップロード処理を開始
                 await uploadFiles(resp.access_token);
             };
 
@@ -314,7 +129,7 @@ app.listen(port, () => {
         }
         
         async function uploadFiles(accessToken) {
-            const files = fileInput.files;
+            const files = document.getElementById('file-input').files;
             if (files.length === 0) {
                 alert('動画ファイルを選択してください。');
                 return;
@@ -332,17 +147,18 @@ app.listen(port, () => {
                     await uploadToGoogleDrive(file, accessToken);
                 } catch (error) {
                     console.error('Upload Error:', error);
-                    alert(`ファイル「${file.name}」のアップロードに失敗しました。`);
+                    // ★★★★★ここが変更点！Googleからのエラーを詳しく表示する★★★★★
+                    alert(`アップロード失敗！\nファイル名: ${file.name}\n理由: ${error.message}`);
                     uploadButton.disabled = false;
-                    document.getElementById('progress-container').style.display = 'none';
                     return;
                 }
             }
 
             alert('すべての動画のアップロードが完了しました！');
-            location.reload(); 
+            location.reload(); // ページをリロード
         }
         
+        // Google Driveにアップロードするコアな関数
         async function uploadToGoogleDrive(file, accessToken) {
             const metadata = {
                 name: `${new Date().getTime()}_${file.name}`,
@@ -353,7 +169,7 @@ app.listen(port, () => {
             form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
             form.append('file', file);
 
-            const response = await fetch('[https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart](https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart)', {
+            const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
                 method: 'POST',
                 headers: new Headers({ 'Authorization': 'Bearer ' + accessToken }),
                 body: form,
@@ -367,6 +183,7 @@ app.listen(port, () => {
             return await response.json();
         }
 
+        // --- ファイル選択のUIロジック ---
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
         const fileList = document.getElementById('file-list');
@@ -375,17 +192,17 @@ app.listen(port, () => {
 
         dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropZone.classList.add('dragover');
+            dropZone.style.backgroundColor = '#e0e0e0';
         });
 
         dropZone.addEventListener('dragleave', (e) => {
             e.preventDefault();
-            dropZone.classList.remove('dragover');
+            dropZone.style.backgroundColor = 'transparent';
         });
 
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropZone.classList.remove('dragover');
+            dropZone.style.backgroundColor = 'transparent';
             fileInput.files = e.dataTransfer.files;
             updateFileList();
         });
