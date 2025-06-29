@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google API Test</title>
+</head>
+<body>
+    <h1>Google API Connection Test</h1>
+    <div id="status">Loading...</div>
+    <button id="testBtn" disabled>Test API</button>
+
+    <script>
+        const API_KEY = 'AIzaSyCH2IAbtvQI0ONUv43HvHvnCLiwiSi5iwg';
+        const CLIENT_ID = '512329280979-o3762jl3r2taaa81k12ac8u00hv2qqhd.apps.googleusercontent.com';
+
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+            console.log(message);
+        }
+
+        // 基本的なAPI読み込みテスト
+        function testBasicLoad() {
+            updateStatus('Testing basic Google API load...');
+            
+            if (typeof gapi === 'undefined') {
+                updateStatus('ERROR: gapi is not loaded');
+                return;
+            }
+            
+            gapi.load('client', {
+                callback: function() {
+                    updateStatus('✅ Google API Client loaded successfully');
+                    document.getElementById('testBtn').disabled = false;
+                },
+                onerror: function() {
+                    updateStatus('❌ Failed to load Google API Client');
+                }
+            });
+        }
+
+        function testAPIKey() {
+            updateStatus('Testing API Key...');
+            
+            gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
+            }).then(function() {
+                updateStatus('✅ API Key is valid');
+            }).catch(function(error) {
+                updateStatus('❌ API Key error: ' + JSON.stringify(error));
+            });
+        }
+
+        // Google API スクリプト読み込み完了時
+        function onGAPILoad() {
+            updateStatus('Google API script loaded');
+            testBasicLoad();
+        }
+
+        document.getElementById('testBtn').addEventListener('click', testAPIKey);
+    </script>
+
+    <script src="https://apis.google.com/js/api.js?onload=onGAPILoad"></script>
+</body>
+</html>

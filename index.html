@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ショート動画アップロードのお願い</title>
+    <title>動画アップロード - クライアント専用ページ</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
     <style>
         * {
             margin: 0;
@@ -51,7 +52,7 @@
         }
         
         .logo-area::before {
-            content: '🌱';
+            content: '🎬';
             position: absolute;
             top: -5px;
             right: 10px;
@@ -207,6 +208,24 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(129, 199, 132, 0.3);
         }
+        
+        .submit-btn.loading {
+            background-color: #bdbdbd;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        
+        .submit-btn.loading::after {
+            content: '...';
+            display: inline-block;
+            animation: loadingDots 1.5s infinite;
+        }
+        
+        @keyframes loadingDots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
 
         .submit-btn:disabled {
             background: #a0aec0;
@@ -242,20 +261,20 @@
             margin-bottom: 25px;
         }
 
-        .instagram-info {
+        .completion-info {
             background: #fef5e7;
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
         }
 
-        .instagram-title {
+        .completion-title {
             font-weight: 600;
             color: #744210;
             margin-bottom: 8px;
         }
 
-        .instagram-text {
+        .completion-text {
             font-size: 14px;
             color: #975a16;
         }
@@ -311,11 +330,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo-area">姫路の種＆<br>ブドウちゃん</div>
-            <h1 class="title">ショート動画アップロードのお願い</h1>
+            <div class="logo-area">クライアント<br>動画アップロード</div>
+            <h1 class="title">動画アップロードページ</h1>
             <p class="subtitle">
-                ショート動画投稿用に使わせていただくため、<strong>5〜10秒程度</strong>のスマホで撮影した動画をご提供いただけますと幸いです😊<br>
-                <small style="color: #68d391; font-weight: 600;">📁 アップロードされた動画は「姫路の種＆ブドウちゃん」専用のGoogle Driveに安全に保存されます</small>
+                撮影した動画（5〜10秒程度）を、指定のGoogle Driveフォルダに直接アップロードしてください😊<br>
+                <small style="color: #68d391; font-weight: 600;">📁 アップロードされた動画は安全に保存されます</small>
             </p>
             <div class="features">
                 <span class="feature-tag">✅ 最大5動画まで</span>
@@ -343,14 +362,14 @@
 
             <div class="form-group">
                 <label class="form-label">
-                    ショート動画素材 <span class="required">*必須</span> <span style="font-size: 12px; color: #68d391;">(最大5動画まで)</span>
+                    動画ファイル <span class="required">*必須</span> <span style="font-size: 12px; color: #68d391;">(最大5動画まで)</span>
                 </label>
                 <div class="upload-area" id="uploadArea">
                     <div class="upload-icon">🎬</div>
                     <div class="upload-text">ここに動画ファイルをドロップ</div>
                     <div class="upload-subtext">またはクリックしてファイルを選択</div>
                     <div class="upload-subtext" style="font-size: 12px; color: #a0aec0;">
-                        📱 ショート動画: 5〜10秒程度<br>
+                        📱 動画: 5〜10秒程度<br>
                         🎞️ 対応形式: MP4, MOV (1動画200MBまで)
                     </div>
                 </div>
@@ -365,7 +384,7 @@
             </div>
 
             <button type="submit" class="submit-btn" id="submitBtn">
-                🎬 ショート動画をアップロードする
+                🎬 動画をアップロードする
             </button>
         </form>
 
@@ -373,111 +392,401 @@
             <div class="thanks-icon">🎉</div>
             <h2 class="thanks-title">ありがとうございます！</h2>
             <p class="thanks-message">
-                ショート動画のアップロードが完了しました。<br>
-                <strong style="color: #2f855a;">📁 「姫路の種＆ブドウちゃん」のGoogle Driveに保存されました</strong><br>
+                動画のアップロードが完了しました。<br>
+                <strong style="color: #2f855a;">📁 Google Driveに安全に保存されました</strong><br>
                 確認後、ご連絡いたします📩
             </p>
             
-            <div class="instagram-info">
-                <div class="instagram-title">📸 Instagram投稿時のお願い</div>
-                <div class="instagram-text">
-                    投稿の際は、よろしければタグ付けをお願いいたします✨<br>
-                    （任意です）
+            <div class="completion-info">
+                <div class="completion-title">📸 今後の流れ</div>
+                <div class="completion-text">
+                    アップロードされた動画を確認後、担当者よりご連絡いたします。<br>
+                    ご不明な点がございましたら、お気軽にお問い合わせください。
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Google APIs Client Library -->
-    <script src="https://apis.google.com/js/api.js"></script>
+    <!-- Google API Client Library -->
+    <script src="https://apis.google.com/js/api.js?onload=onGAPILoad" onerror="handleScriptError('Google API')"></script>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client?onload=onGISLoad" onerror="handleScriptError('Google Identity Services')"></script>
+    
     <script>
-        // Google Drive API 設定
-        const API_KEY = 'YOUR_API_KEY';
-        const CLIENT_ID = 'YOUR_CLIENT_ID';
+        // ================================================
+        // 🔧 設定 - ここにあなたの情報を入力してください
+        // ================================================
+        
+        // TODO: ここにあなたのGoogle API Keyを入力
+        const API_KEY = 'AIzaSyCH2IAbtvQI0ONUv43HvHvnCLiwiSi5iwg';
+        
+        // TODO: ここにあなたのGoogle OAuth 2.0 Client IDを入力
+        const CLIENT_ID = '512329280979-o3762jl3r2taaa81k12ac8u00hv2qqhd.apps.googleusercontent.com';
+        
+        // TODO: ここにアップロード先のGoogle Drive フォルダIDを入力
+        const UPLOAD_FOLDER_ID = '1XFU7kni7SCMyYmVR_XjqWJ7aH8wv4v0E';
+        
+        // ================================================
+        // Google Drive API設定（変更不要）
+        // ================================================
         const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
         const SCOPES = 'https://www.googleapis.com/auth/drive.file';
         
-        let gapi;
-        let googleAuth;
+        // ================================================
+        // グローバル変数
+        // ================================================
+        let tokenClient = null;
+        let gapiInited = false;
+        let gisInited = false;
+        
+        // ================================================
+        // スクリプト読み込みエラーハンドリング
+        // ================================================
+        function handleScriptError(scriptName) {
+            console.error(`${scriptName} の読み込みに失敗しました`);
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = `${scriptName} 読み込みエラー`;
+                submitBtn.style.background = '#e53e3e';
+                submitBtn.classList.remove('loading');
+            }
+            alert(`${scriptName} の読み込みに失敗しました。\n\n以下をお試しください：\n• ページをリロード\n• ネットワーク接続を確認\n• 広告ブロッカーを無効化`);
+        }
 
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('videoFile');
-        const form = document.getElementById('uploadForm');
-        const thanksScreen = document.getElementById('thanksScreen');
-        const submitBtn = document.getElementById('submitBtn');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
-
-        // Google API初期化
-        async function initializeGapi() {
-            await new Promise(resolve => {
-                if (typeof window.gapi !== 'undefined') {
-                    resolve();
-                } else {
-                    window.addEventListener('load', resolve);
+        // Google API Client が完全に読み込まれたことを検知
+        function onGAPILoad() {
+            window.gapiLoaded = true;
+            console.log('Google API Client が読み込まれました');
+            
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                initializeGoogleAPIs();
+            }
+        }
+        
+        // Google Identity Services が完全に読み込まれたことを検知
+        function onGISLoad() {
+            window.gisLoaded = true;
+            console.log('Google Identity Services が読み込まれました');
+            
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                initializeGoogleAPIs();
+            }
+        }
+        
+        // グローバル変数の初期化
+        window.gapiLoaded = false;
+        window.gisLoaded = false;
+        window.googleAPIsInitialized = false;
+        
+        // ================================================
+        // Google APIs の初期化
+        // ================================================
+        function initializeGoogleAPIs() {
+            // 設定値のバリデーション
+            if (API_KEY === 'YOUR_API_KEY_HERE' || CLIENT_ID === 'YOUR_CLIENT_ID_HERE' || UPLOAD_FOLDER_ID === 'YOUR_FOLDER_ID_HERE') {
+                console.error('API_KEY、CLIENT_ID、UPLOAD_FOLDER_IDが設定されていません');
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'API設定が必要です';
+                    submitBtn.style.background = '#e53e3e';
+                    submitBtn.classList.remove('loading');
+                }
+                alert('設定が完了していません。\n\nコードの先頭部分で以下を設定してください：\n• API_KEY\n• CLIENT_ID\n• UPLOAD_FOLDER_ID');
+                return;
+            }
+            
+            // 両方のライブラリが読み込まれていることを確認
+            if (!window.gapiLoaded || !window.gisLoaded) {
+                console.log('Google API または Google Identity Services の読み込みを待機中...');
+                return;
+            }
+            
+            // すでに初期化済みの場合は何もしない
+            if (window.googleAPIsInitialized) {
+                console.log('Google APIs は既に初期化されています');
+                return;
+            }
+            
+            console.log('Google APIs の初期化を開始します...');
+            
+            // Google API Client の初期化
+            gapi.load('client:auth2', {
+                callback: function() {
+                    console.log('Google API Client の初期化を開始します');
+                    
+                    gapi.client.init({
+                        'apiKey': API_KEY,
+                        'discoveryDocs': [DISCOVERY_DOC],
+                        'clientId': CLIENT_ID,
+                        'scope': SCOPES
+                    }).then(function() {
+                        console.log('Google API Client の初期化が完了しました');
+                        gapiInited = true;
+                        
+                        // Google Identity Services の初期化
+                        try {
+                            tokenClient = google.accounts.oauth2.initTokenClient({
+                                client_id: CLIENT_ID,
+                                scope: SCOPES,
+                                callback: ''
+                            });
+                            console.log('Google Identity Services の初期化が完了しました');
+                            gisInited = true;
+                            window.googleAPIsInitialized = true;
+                            maybeEnableButtons();
+                        } catch (error) {
+                            console.error('Google Identity Services の初期化に失敗しました:', error);
+                            onGisError(error);
+                        }
+                    }, function(error) {
+                        console.error('Google API Client の初期化に失敗しました:', error);
+                        onGapiError(error);
+                    });
+                },
+                onerror: function(error) {
+                    console.error('Google API Client の読み込み中にエラーが発生しました:', error);
+                    onGapiError(error);
+                },
+                timeout: 10000,
+                ontimeout: function() {
+                    const error = new Error('Google API Client の読み込みがタイムアウトしました');
+                    console.error(error.message);
+                    onGapiError(error);
                 }
             });
-            
-            await window.gapi.load('auth2', async () => {
-                await window.gapi.auth2.init({
-                    client_id: CLIENT_ID,
-                });
-                googleAuth = window.gapi.auth2.getAuthInstance();
-            });
-            
-            await window.gapi.load('client', async () => {
-                await window.gapi.client.init({
-                    apiKey: API_KEY,
-                    discoveryDocs: [DISCOVERY_DOC],
-                });
-            });
         }
-
-        // Google Drive認証
-        async function authenticateGoogleDrive() {
-            if (!googleAuth.isSignedIn.get()) {
-                await googleAuth.signIn();
+        
+        // ================================================
+        // エラーハンドリング
+        // ================================================
+        function onGapiError(error) {
+            console.error('Google API エラー:', error);
+            let errorMessage = 'Google API の初期化中にエラーが発生しました。';
+            
+            if (error.status === 403) {
+                errorMessage += '\n\nAPIキーが無効か、必要なAPIが有効になっていません。';
+            } else if (error.status === 0) {
+                errorMessage += '\n\nネットワーク接続に問題があるか、APIエンドポイントに到達できません。';
+            } else if (error.result && error.result.error) {
+                errorMessage += `\n\nエラー: ${error.result.error.message}`;
+            } else if (error.message && error.message.includes('タイムアウト')) {
+                errorMessage = 'Google API の読み込みに時間がかかっています。\n\n以下をお試しください：\n• ページをリロード（F5キー）\n• ネットワーク接続を確認\n• 広告ブロッカーを無効化';
             }
-            return googleAuth.currentUser.get().getAuthResponse().access_token;
+            
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'エラー: ページをリロードしてください';
+                submitBtn.style.background = '#e53e3e';
+                submitBtn.classList.remove('loading');
+            }
+            
+            alert(errorMessage);
+        }
+        
+        function onGisError(error) {
+            console.error('Google Identity Services エラー:', error);
+            alert('Google Identity Services の初期化中にエラーが発生しました。\n\n■エラー内容■\n' + (error.message || JSON.stringify(error)));
+        }
+        
+        // ================================================
+        // ページ読み込み時の初期化
+        // ================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM の読み込みが完了しました');
+            
+            // 初期状態ではアップロードボタンを無効化
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Google Drive APIに接続中...';
+                submitBtn.classList.add('loading');
+            }
+            
+            // Google API と Google Identity Services の読み込み状態を確認
+            if (window.gapiLoaded && window.gisLoaded) {
+                initializeGoogleAPIs();
+            } else {
+                const checkInterval = setInterval(() => {
+                    if (window.gapiLoaded && window.gisLoaded) {
+                        clearInterval(checkInterval);
+                        initializeGoogleAPIs();
+                    }
+                }, 100);
+                
+                // 30秒経っても初期化されない場合はエラー
+                setTimeout(() => {
+                    if (!window.googleAPIsInitialized) {
+                        clearInterval(checkInterval);
+                        const error = new Error('Google APIs の初期化がタイムアウトしました。ページをリロードしてください。');
+                        console.error(error.message);
+                        onGapiError(error);
+                    }
+                }, 30000);
+            }
+        });
+        
+        // ================================================
+        // APIの初期化状態に基づいてボタンの有効/無効を切り替え
+        // ================================================
+        function maybeEnableButtons() {
+            const submitBtn = document.getElementById('submitBtn');
+            if (!submitBtn) return;
+            
+            if (gapiInited && gisInited) {
+                console.log('Google APIs が正常に初期化されました');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🎬 動画をアップロードする';
+                submitBtn.classList.remove('loading');
+                
+                // 成功メッセージを一時表示
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '✅ 準備完了！';
+                submitBtn.style.background = 'linear-gradient(135deg, #68d391, #48bb78)';
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = 'linear-gradient(135deg, #81c784, #66bb6a)';
+                }, 2000);
+            } else {
+                console.log('Google APIs の初期化を待機中...');
+                console.log(`gapiInited: ${gapiInited}, gisInited: ${gisInited}`);
+                submitBtn.disabled = true;
+                
+                if (!gapiInited && !gisInited) {
+                    submitBtn.textContent = 'Google Drive APIに接続中...';
+                } else if (gapiInited && !gisInited) {
+                    submitBtn.textContent = '認証サービス準備中...';
+                } else {
+                    submitBtn.textContent = '準備完了まであと少し...';
+                }
+                submitBtn.classList.add('loading');
+            }
+        }
+        
+        // ================================================
+        // アクセストークン取得
+        // ================================================
+        async function getAccessToken() {
+            return new Promise((resolve, reject) => {
+                tokenClient.callback = async (resp) => {
+                    if (resp.error !== undefined) {
+                        reject(resp);
+                    }
+                    resolve(resp.access_token);
+                };
+                
+                if (gapi.client.getToken() === null) {
+                    tokenClient.requestAccessToken({prompt: 'consent'});
+                } else {
+                    tokenClient.requestAccessToken({prompt: ''});
+                }
+            });
         }
 
+        // ================================================
         // Google Driveにファイルアップロード
+        // ================================================
         async function uploadToGoogleDrive(file, accessToken, onProgress) {
-            const metadata = {
-                name: `${new Date().getTime()}_${file.name}`,
-                parents: ['YOUR_FOLDER_ID'] // 姫路の種フォルダのID
-            };
-
-            const form = new FormData();
-            form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
-            form.append('file', file);
-
-            return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                
-                xhr.upload.addEventListener('progress', (e) => {
-                    if (e.lengthComputable) {
-                        const percentComplete = (e.loaded / e.total) * 100;
-                        onProgress(percentComplete);
-                    }
+            if (!file) {
+                throw new Error('ファイルが選択されていません。');
+            }
+            
+            if (!accessToken) {
+                throw new Error('認証トークンが取得できませんでした。もう一度お試しください。');
+            }
+            
+            try {
+                // フォルダの存在確認
+                const folderResponse = await gapi.client.drive.files.get({
+                    fileId: UPLOAD_FOLDER_ID,
+                    fields: 'id, name, mimeType'
                 });
-
-                xhr.onload = () => {
-                    if (xhr.status === 200) {
-                        resolve(JSON.parse(xhr.responseText));
-                    } else {
-                        reject(new Error('Upload failed'));
-                    }
+                
+                if (folderResponse.result.mimeType !== 'application/vnd.google-apps.folder') {
+                    throw new Error('指定されたフォルダIDはディレクトリではありません。');
+                }
+                
+                console.log('アップロード先フォルダ:', folderResponse.result.name);
+                
+                const metadata = {
+                    name: `${new Date().getTime()}_${file.name}`,
+                    parents: [UPLOAD_FOLDER_ID]
                 };
 
-                xhr.onerror = () => reject(new Error('Upload failed'));
+                const form = new FormData();
+                form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
+                form.append('file', file);
 
-                xhr.open('POST', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart');
-                xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
-                xhr.send(form);
-            });
+                console.log('ファイルアップロードを開始します...');
+                
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    
+                    xhr.open('POST', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', true);
+                    xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
+                    
+                    xhr.upload.addEventListener('progress', (e) => {
+                        if (e.lengthComputable) {
+                            const percentComplete = Math.round((e.loaded / e.total) * 100);
+                            console.log(`アップロード進捗: ${percentComplete}%`);
+                            onProgress(percentComplete);
+                        }
+                    });
+
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                console.log('ファイルアップロードが完了しました:', response);
+                                resolve(response);
+                            } catch (e) {
+                                console.error('レスポンスの解析に失敗しました:', e);
+                                reject(new Error('サーバーからの応答を処理できませんでした。'));
+                            }
+                        } else {
+                            let errorMessage = 'アップロードに失敗しました。';
+                            try {
+                                const errorData = JSON.parse(xhr.responseText);
+                                console.error('Google Drive API エラー詳細:', errorData);
+                                
+                                if (errorData.error && errorData.error.message) {
+                                    errorMessage += `\n\n■エラー内容■\n${errorData.error.message}`;
+                                    
+                                    if (errorData.error.message.includes('insufficientFilePermissions')) {
+                                        errorMessage += '\n\nこのアカウントには指定されたフォルダへの書き込み権限がありません。';
+                                    } else if (errorData.error.message.includes('quotaExceeded')) {
+                                        errorMessage += '\n\nGoogle Driveのストレージ容量が不足しています。';
+                                    } else if (errorData.error.message.includes('dailyLimitExceeded')) {
+                                        errorMessage += '\n\n1日のアップロード制限に達しました。24時間後に再度お試しください。';
+                                    }
+                                }
+                            } catch (e) {
+                                console.error('エラーレスポンスの解析に失敗しました:', e);
+                                errorMessage += '\n\nエラーの詳細を特定できませんでした。';
+                            }
+                            reject(new Error(errorMessage));
+                        }
+                    };
+
+                    xhr.onerror = function() {
+                        console.error('ネットワークエラーが発生しました。');
+                        reject(new Error('ネットワークエラーが発生しました。インターネット接続を確認してください。'));
+                    };
+
+                    xhr.send(form);
+                });
+            } catch (error) {
+                console.error('アップロード処理中にエラーが発生しました:', error);
+                throw error;
+            }
         }
 
+        // ================================================
+        // ユーティリティ関数
+        // ================================================
+        
         // ファイルサイズを読みやすい形式に変換
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
@@ -547,6 +856,20 @@
             }
         }
 
+        // ================================================
+        // DOM要素とイベントリスナー
+        // ================================================
+        
+        // DOM要素の取得
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('videoFile');
+        const fileInfo = document.getElementById('filesList');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const form = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const thanksScreen = document.getElementById('thanksScreen');
+
         // ドラッグ&ドロップ機能
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -564,10 +887,8 @@
             const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('video/'));
             
             if (files.length > 0) {
-                // 最大5動画まで
                 const selectedFiles = files.slice(0, 5);
                 
-                // FileListオブジェクトを作成
                 const dt = new DataTransfer();
                 selectedFiles.forEach(file => dt.items.add(file));
                 fileInput.files = dt.files;
@@ -586,12 +907,14 @@
         // ファイル選択時の処理
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length > 0) {
-                const files = Array.from(e.target.files).slice(0, 5); // 最大5動画
+                const files = Array.from(e.target.files).slice(0, 5);
                 displayMultipleFiles(files);
             }
         });
 
+        // ================================================
         // フォーム送信処理
+        // ================================================
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -623,60 +946,101 @@
             if (!isValid) return;
 
             try {
-                // Google Drive API初期化
-                await initializeGapi();
+                // Google APIの初期化チェック
+                if (!gapiInited || !gisInited) {
+                    throw new Error('Google APIが初期化されていません');
+                }
                 
                 // アップロード処理開始
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'Google Driveに接続中...';
                 
                 // Google Drive認証
-                const accessToken = await authenticateGoogleDrive();
+                const accessToken = await getAccessToken();
                 
                 submitBtn.textContent = 'アップロード中...';
                 progressBar.style.display = 'block';
                 
-                // Google Driveにアップロード
-                const uploadResult = await uploadToGoogleDrive(
-                    videoFile.files[0], 
-                    accessToken,
-                    (progress) => {
-                        progressFill.style.width = progress + '%';
-                    }
-                );
+                // 複数ファイルのアップロード処理
+                const uploadResults = [];
+                const totalFiles = videoFile.files.length;
+                
+                for (let i = 0; i < totalFiles; i++) {
+                    const file = videoFile.files[i];
+                    submitBtn.textContent = `アップロード中... (${i + 1}/${totalFiles})`;
+                    
+                    const uploadResult = await uploadToGoogleDrive(
+                        file, 
+                        accessToken,
+                        (progress) => {
+                            const overallProgress = ((i / totalFiles) + (progress / 100 / totalFiles)) * 100;
+                            progressFill.style.width = overallProgress + '%';
+                        }
+                    );
+                    
+                    uploadResults.push(uploadResult);
+                }
                 
                 // アップロード完了
                 progressFill.style.width = '100%';
                 
-                // フォームデータをスプレッドシートに保存（オプション）
+                // 完了メッセージを表示
+                submitBtn.textContent = '✅ アップロード完了！';
+                submitBtn.style.background = 'linear-gradient(135deg, #68d391, #48bb78)';
+                
+                // フォームデータログ出力
                 const formData = {
                     userName: userName.value,
                     videoDescription: videoDescription.value,
-                    fileName: videoFile.files[0].name,
-                    fileSize: formatFileSize(videoFile.files[0].size),
-                    googleDriveFileId: uploadResult.id,
+                    files: uploadResults.map((result, index) => ({
+                        fileName: videoFile.files[index].name,
+                        fileSize: formatFileSize(videoFile.files[index].size),
+                        googleDriveFileId: result.id
+                    })),
                     uploadTime: new Date().toISOString()
                 };
                 
                 console.log('アップロード完了:', formData);
                 
+                // 少し待ってから完了画面に遷移
+                setTimeout(() => {
+                    submitBtn.textContent = 'Google Driveで安全に保存されました';
+                }, 1000);
+                
                 setTimeout(() => {
                     form.style.display = 'none';
                     thanksScreen.style.display = 'block';
-                }, 500);
+                }, 2500);
                 
             } catch (error) {
-                console.error('アップロードエラー:', error);
-                alert('アップロードに失敗しました。もう一度お試しください。');
+                console.error('アップロードエラーの詳細:', error);
+
+                let errorMessage = '不明なエラーです。';
+                
+                if (error && error.result && error.result.error && error.result.error.message) {
+                    errorMessage = error.result.error.message;
+                } else if (error && error.message) {
+                    errorMessage = error.message;
+                } else {
+                    try {
+                        errorMessage = JSON.stringify(error);
+                    } catch (e) {
+                        errorMessage = 'エラーオブジェクトを文字列に変換できませんでした。';
+                    }
+                }
+
+                alert('アップロードに失敗しました。\n\n■エラー内容■\n' + errorMessage);
+
                 submitBtn.disabled = false;
-                submitBtn.textContent = '🎬 ショート動画をアップロードする';
+                submitBtn.textContent = '🎬 動画をアップロードする';
+                submitBtn.style.background = 'linear-gradient(135deg, #81c784, #66bb6a)';
                 progressBar.style.display = 'none';
             }
         });
 
-        // ページ読み込み時にGoogle API初期化
+        // ページ読み込み完了
         window.addEventListener('load', () => {
-            initializeGapi().catch(console.error);
+            console.log('ページ読み込み完了');
         });
     </script>
 </body>
