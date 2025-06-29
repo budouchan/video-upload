@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = process.env.PORT || 3000;
 
 // APIキーなどをフロントエンドに渡すためのAPIエンドポイント
 app.get('/api/config', (req, res) => {
@@ -13,14 +12,15 @@ app.get('/api/config', (req, res) => {
 });
 
 // 静的ファイルの提供（index.htmlなどを表示するため）
-app.use(express.static(path.join(__dirname)));
+// publicフォルダを静的ファイルのルートとして設定
+app.use(express.static(path.join(__dirname, 'public')));
 
-// メインページのルート
+
+// ルートURLへのアクセスでindex.htmlを返す
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// サーバー起動
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+
+// VercelがExpressアプリを認識できるように、appをエクスポートします
+module.exports = app;
