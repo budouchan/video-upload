@@ -1,0 +1,14 @@
+{
+  "name": "video-upload",
+  "version": "1.0.0",
+  "description": "姫路の種＆ブドウちゃん 動画アップロードシステム",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
